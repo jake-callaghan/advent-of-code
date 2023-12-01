@@ -22,7 +22,7 @@ def parse_part_two(line) -> int:
     def parse(subset, left_to_right):
         if len(subset) == 0:
             return None
-        # either line[0..i) is a digit, or line[i] is a digit, or None
+        # either line[0..i) is a digit, or line[i-1] is a digit, or None
         for x in DIGITS:
             if x in subset:
                 return DIGITS[x]
