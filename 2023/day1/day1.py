@@ -4,12 +4,11 @@ from decorators import *
 
 @print_output
 @test(readfile('day1/part1_example.txt'), 142)
-def part_one(input):
+def part_one(lines):
     def parse_part_one(line) -> int:
         digits = [c for c in line if c.isnumeric()]
-        return int(digits[0] + digits[-1]) if len(digits) >= 2 else int(digits[0] + digits[0])
-
-    return sum([parse_part_one(line) for line in input])
+        return int(digits[0] + digits[-1])
+    return sum([parse_part_one(line) for line in lines])
 
 
 @print_output
