@@ -1,9 +1,9 @@
-from utils import *
-from decorators import *
+from core.utils import *
+from core.decorators import *
 
 
 @print_output
-@test(readfile('day1/part1_example.txt'), 142)
+@test('part1_example.txt', 142)
 def part_one(lines):
     def parse_part_one(line) -> int:
         digits = [c for c in line if c.isnumeric()]
@@ -12,7 +12,7 @@ def part_one(lines):
 
 
 @print_output
-@test(readfile('day1/part2_example.txt'), 281)
+@test('part2_example.txt', 281)
 def part_two(lines):
     return sum([parse_part_two(line) for line in lines])
 
@@ -44,6 +44,6 @@ def parse_part_two(line) -> int:
 
 
 if __name__ == '__main__':
-    input = readfile('day1/input.txt')
-    part_one(input)
-    part_two(input)
+    lines = readfile('input.txt')
+    part_one(lines)
+    part_two(lines)
