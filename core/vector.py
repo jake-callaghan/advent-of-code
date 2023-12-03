@@ -1,8 +1,9 @@
 import copy
+import math
 
 
 class Vector:
-    """Defines a 2-coordinate vector (i,j) with  std operations and an optional value to be stored there"""
+    """Defines a 2-coordinate vector (i,j) with standard operations and an optional value to be stored there"""
     def __init__(self, i: int, j: int, value=None):
         self._i = i
         self._j = j
@@ -83,7 +84,7 @@ class Vector:
         return abs(self.i - other.i) + abs(self.j - other.j)
 
     def real_distance(self, other):
-        return (self.i - other.i) ** 2 + (self.j - other.j) ** 2
+        return math.sqrt((self.i - other.i) ** 2 + (self.j - other.j) ** 2)
 
     def __copy__(self):
         return Vector(self.i, self.j, self.value)
@@ -96,3 +97,6 @@ class Vector:
 
     def __hash__(self):
         return hash(self.__str__())
+
+    def moore_neighborhood(self):
+        return [Vector(self.i+di, self.j+dj) for di, dj in [(-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1)]]

@@ -15,7 +15,7 @@ DIGITS = {
 def readfile(path) -> [str]:
     """Read in an input file and return a list of lines"""
     with open(path, 'r') as file:
-        return file.readlines()
+        return [line.strip('\n') for line in file.readlines()]
 
 
 def print_matrix(matrix, x_min=0, x_max=10, y_min=0, y_max=10, blank=' '):
