@@ -1,13 +1,16 @@
+from functools import lru_cache
+
 from core.decorators import *
 from core.utils import *
 from core.vector import Vector
 
 
-def parse_grid_and_symbols(lines):
+@lru_cache
+def parse(filename):
     numbers = []
     symbols = {}
     row = 0
-    for line in lines:
+    for line in readfile(filename):
         col = 0
         buffer = []
         while col < len(line):
@@ -28,11 +31,12 @@ def parse_grid_and_symbols(lines):
         row += 1
     return numbers, symbols
 
+
 @print_output
-@test(filename='part1_example.txt', output=4361)
-def part_one(lines) -> int:
+@test(filename='part1_example.txt', expected_output=4361, parser=parse)
+def part_one(data) -> int:
     total = 0
-    ns, syms = parse_grid_and_symbols(lines)
+    ns, syms = data
     for n in ns:
         add = False
         for digit in n:
@@ -43,14 +47,15 @@ def part_one(lines) -> int:
             if add:
                 break
         if add:
-            total += int(''.join(map(str,[v.value for v in n])))
+            total += int(''.join(map(str, [v.value for v in n])))
     return total
 
+
 @print_output
-@test(filename="part1_example.txt", output=467835)
-def part_two(lines) -> int:
+@test(filename="part1_example.txt", expected_output=467835, parser=parse)
+def part_two(data) -> int:
     total = 0
-    nss, syms = parse_grid_and_symbols(lines)
+    nss, syms = data
     ns = {}
     # map points(i,j) to numbers covering points (i,j)
     for n in nss:
@@ -75,8 +80,7 @@ def part_two(lines) -> int:
     return total
 
 
-
 if __name__ == '__main__':
-    day3_input = readfile('input.txt')
-    part_one(day3_input)
-    part_two(day3_input)
+    data = parse('input.txt')
+    part_one(data)
+    part_two(data)
