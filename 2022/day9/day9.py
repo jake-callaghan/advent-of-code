@@ -54,6 +54,6 @@ def part_two(lines) -> int:
 
 
 if __name__ == '__main__':
-    day9_input = readfile('input.txt')
+    day9_input = readfile('part1_input.txt')
     part_one(day9_input)
     part_two(day9_input)
