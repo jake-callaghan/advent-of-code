@@ -99,4 +99,4 @@ class Vector:
         return hash(self.__str__())
 
     def moore_neighborhood(self):
-        return [Vector(self.i+di, self.j+dj) for di, dj in [(-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1)]]
+        return [self + d for d in [(-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1)]]

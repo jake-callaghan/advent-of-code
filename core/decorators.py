@@ -1,10 +1,8 @@
 import functools
-from core.utils import readfile
 
 
-def test(filename, expected_output, parser, data=None):
-    """Wraps a function by first calling it on a test input file and verifying its expected output"""
-
+def test(expected_output, filename=None, parser=None, data=None):
+    """Wraps a function by first calling it on a test input file OR data, and verifying its expected output"""
     def test_wrapper(f):
         functools.wraps(f)
 
