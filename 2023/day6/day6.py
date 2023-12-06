@@ -23,5 +23,5 @@ def part_one(data):
 
 
 if __name__ == '__main__':
-    part_one('input.txt')
-    part_one('part2_input.txt')
+    part_one(parse_input('input.txt'))
+    part_one(parse_input('part2_input.txt'))
