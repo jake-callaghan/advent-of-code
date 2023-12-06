@@ -1,4 +1,5 @@
 from core.decorators import *
+from core.grid import Grid
 from core.utils import *
 from core.vector import Vector
 
@@ -10,6 +11,14 @@ def parse_grid_and_symbols(lines):
     for line in lines:
         col = 0
         buffer = []
+
+        def assign():
+            value = int(''.join(map(str, [v.value for v in buffer])))
+            for v in buffer:
+                v.value(value)
+            numbers.append(buffer)
+            buffer = []
+
         while col < len(line):
             current = line[col]
             if current.isnumeric():
@@ -28,6 +37,7 @@ def parse_grid_and_symbols(lines):
         row += 1
     return numbers, symbols
 
+
 @print_output
 @test(filename='part1_example.txt', output=4361)
 def part_one(lines) -> int:
@@ -43,37 +53,25 @@ def part_one(lines) -> int:
             if add:
                 break
         if add:
-            total += int(''.join(map(str,[v.value for v in n])))
+            total += int(''.join(map(str, [v.value for v in n])))
     return total
+
 
 @print_output
 @test(filename="part1_example.txt", output=467835)
 def part_two(lines) -> int:
     total = 0
     nss, syms = parse_grid_and_symbols(lines)
-    ns = {}
-    # map points(i,j) to numbers covering points (i,j)
-    for n in nss:
-        value = int(''.join(map(str, [v.value for v in n])))
-        for d in n:
-            if d.i not in ns:
-                ns[d.i] = {}
-            ns[d.i][d.j] = value
-    # find adjacent numbers to all * symbols
+    grid = Grid(size=150, blank='.', points=[x for sublist in nss for x in sublist])
     for row in syms:
         for col in syms[row]:
             sym = syms[row][col]
             if sym != '*': continue
-            ratios = set()
-            for neighbor in Vector(row, col).moore_neighborhood():
-                if neighbor.i in ns and neighbor.j in ns[neighbor.i]:
-                    ratios.add(ns[neighbor.i][neighbor.j])
-
+            ratios = {v.value for v in grid.neighbors(row, col) if v.value is not None}
             if len(ratios) == 2:
                 ratios_list = list(ratios)
                 total += ratios_list[0] * ratios_list[1]
     return total
-
 
 
 if __name__ == '__main__':
