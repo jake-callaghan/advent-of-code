@@ -6,7 +6,7 @@ from core.utils import readfile, print_matrix
 
 
 @print_output
-@test(filename='part1_example.txt', output=13)
+@test(filename='part1_example.txt', expected_output=13)
 def part_one(lines) -> int:
     head = Vector(0, 0)
     tail = Vector(0, 0)
@@ -25,7 +25,7 @@ def part_one(lines) -> int:
 
 
 @print_output
-@test(filename='part2_example.txt', output=36)
+@test(filename='part2_example.txt', expected_output=36)
 def part_two(lines) -> int:
     rope = {i: Vector(0, 0, i) for i in range(0, 10)}
     rope[0].value = 'H'

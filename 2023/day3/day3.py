@@ -1,24 +1,18 @@
+from functools import lru_cache
+
 from core.decorators import *
-from core.grid import Grid
 from core.utils import *
 from core.vector import Vector
 
 
-def parse_grid_and_symbols(lines):
+@lru_cache
+def parse(filename):
     numbers = []
     symbols = {}
     row = 0
-    for line in lines:
+    for line in readfile(filename):
         col = 0
         buffer = []
-
-        def assign():
-            value = int(''.join(map(str, [v.value for v in buffer])))
-            for v in buffer:
-                v.value(value)
-            numbers.append(buffer)
-            buffer = []
-
         while col < len(line):
             current = line[col]
             if current.isnumeric():
@@ -39,10 +33,10 @@ def parse_grid_and_symbols(lines):
 
 
 @print_output
-@test(filename='part1_example.txt', output=4361)
-def part_one(lines) -> int:
+@test(filename='part1_example.txt', expected_output=4361, parser=parse)
+def part_one(data) -> int:
     total = 0
-    ns, syms = parse_grid_and_symbols(lines)
+    ns, syms = data
     for n in ns:
         add = False
         for digit in n:
@@ -58,16 +52,28 @@ def part_one(lines) -> int:
 
 
 @print_output
-@test(filename="part1_example.txt", output=467835)
-def part_two(lines) -> int:
+@test(filename="part1_example.txt", expected_output=467835, parser=parse)
+def part_two(data) -> int:
     total = 0
-    nss, syms = parse_grid_and_symbols(lines)
-    grid = Grid(size=150, blank='.', points=[x for sublist in nss for x in sublist])
+    nss, syms = data
+    ns = {}
+    # map points(i,j) to numbers covering points (i,j)
+    for n in nss:
+        value = int(''.join(map(str, [v.value for v in n])))
+        for d in n:
+            if d.i not in ns:
+                ns[d.i] = {}
+            ns[d.i][d.j] = value
+    # find adjacent numbers to all * symbols
     for row in syms:
         for col in syms[row]:
             sym = syms[row][col]
             if sym != '*': continue
-            ratios = {v.value for v in grid.neighbors(row, col) if v.value is not None}
+            ratios = set()
+            for neighbor in Vector(row, col).moore_neighborhood():
+                if neighbor.i in ns and neighbor.j in ns[neighbor.i]:
+                    ratios.add(ns[neighbor.i][neighbor.j])
+
             if len(ratios) == 2:
                 ratios_list = list(ratios)
                 total += ratios_list[0] * ratios_list[1]
@@ -75,6 +81,6 @@ def part_two(lines) -> int:
 
 
 if __name__ == '__main__':
-    day3_input = readfile('input.txt')
-    part_one(day3_input)
-    part_two(day3_input)
+    data = parse('input.txt')
+    part_one(data)
+    part_two(data)

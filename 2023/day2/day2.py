@@ -19,7 +19,7 @@ def parse_game(x):
 
 
 @print_output
-@test(filename='part1_example.txt', output=8)
+@test(filename='part1_example.txt', expected_output=8)
 def part_one(lines):
     total = 0
     for line in lines:
@@ -35,7 +35,7 @@ def part_one(lines):
 
 
 @print_output
-@test(filename='part1_example.txt', output=2286)
+@test(filename='part1_example.txt', expected_output=2286)
 def part_two(lines):
     total = 0
     for line in lines:
