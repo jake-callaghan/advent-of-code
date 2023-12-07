@@ -1,17 +1,15 @@
 import functools
-from core.utils import readfile
 
 
-def test(filename, output):
-    """Wraps a function by first calling it on a test input and verifying its expected output"""
-
+def test(expected_output, filename=None, parser=None, data=None):
+    """Wraps a function by first calling it on a test input file OR data, and verifying its expected output"""
     def test_wrapper(f):
         functools.wraps(f)
 
         def run_test(*args, **kwargs):
-            out = f(readfile(filename))
-            if out != output:
-                raise Exception(f"Output {out} != expected {output}")
+            out = f(data, **kwargs) if data is not None else f(parser(filename), **kwargs)
+            if out != expected_output:
+                raise Exception(f"Output {out} != expected {expected_output}")
             return f(*args, **kwargs)
 
         return run_test
